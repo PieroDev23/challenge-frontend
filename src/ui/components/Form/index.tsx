@@ -5,10 +5,11 @@ import { PropsWithChildren } from 'react';
 export type FormProps = {
     name: string;
     styles?: BoxProps
+    handleSubmit?: (event: any ) => void
 } & PropsWithChildren
 
 
-function Form({ name, children, styles }: FormProps) {
+function Form({ name, children, styles, handleSubmit }: FormProps) {
     /**
      * Initializers
      */
@@ -38,7 +39,7 @@ function Form({ name, children, styles }: FormProps) {
      * Renders
      */
     return (
-        <Box  {...boxProps}>
+        <Box  {...boxProps} onSubmit={handleSubmit}>
             {children}
         </Box>
     );

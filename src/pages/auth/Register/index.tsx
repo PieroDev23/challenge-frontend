@@ -1,6 +1,13 @@
-import { Heading, FormControl, FormLabel, Input, Button, ButtonProps, BoxProps, InputProps, Box } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input } from "@chakra-ui/react";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Form, FormProps } from "../../../ui/components";
+import { AUTH_ITEM_KEY_LS, EMAIL_REGEX, EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
+import { useAuth, useLocalStorage } from "../../../hooks";
+import { CustomAlert, Form } from "../../../ui/components";
+import { boxProps, btnBackProps, btnSubmitProps, formProps, inputEmailProps, inputFirstnameProps, inputLastnameProps, inputPasswordProps } from "./styles";
+import { sanitizeObject } from "../../../helpers";
 
 
 
@@ -9,13 +16,50 @@ function RegisterPage() {
      * Initializers
      */
 
-    /**
-     * Contexts
-     */
+    const [formError, setFormError] = useState({ hasError: false, message: '' });
+    const [isLoading, setIsLoading] = useState(false);
+    const defaultValues = {
+        email: '',
+        lastname: '',
+        firstname: '',
+        password: ''
+    }
 
-    /**
-     * Functions
-     */
+    const { setItem } = useLocalStorage(AUTH_ITEM_KEY_LS);
+    const { register, handleSubmit, formState } = useForm({ defaultValues });
+    const { auth } = useAuth();
+    const { errors } = formState;
+
+    useEffect(() => {
+
+        if (auth) {
+            navigate('/dashboard');
+            return
+        }
+
+    }, []);
+
+    const handleSubmitCallback = async (data: FieldValues) => {
+        setFormError({ hasError: false, message: '' });
+        setIsLoading(true);
+        try {
+            const { data: axiosData } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, sanitizeObject(data));
+            setItem(JSON.stringify(axiosData));
+
+            navigate('/dashboard');
+
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+
+            if (!(error instanceof AxiosError)) {
+                return;
+            }
+
+            setFormError({ hasError: true, message: error.response?.data.message || EXCEPTION_ERROR_MESSAGE });
+            console.log(error.response?.data);
+        }
+    }
 
     /**
      * Hooks
@@ -28,90 +72,48 @@ function RegisterPage() {
      */
     return (
         <Box {...boxProps}>
-            <Form {...formProps}>
-                <Heading as='h1'> Register </Heading>
-                <FormControl isRequired>
-                    <FormLabel>Email</FormLabel>
-                    <Input {...inputEmailProps} />
+            <Form {...formProps} handleSubmit={handleSubmit(handleSubmitCallback)}>
+                <Heading as='h1' marginBottom={'8px'}> Register </Heading>
+                <FormControl isInvalid={!!errors.email}>
+                    <FormLabel>Email <span style={{ color: 'red' }}>*</span></FormLabel>
+                    <Input {...inputEmailProps} {...register('email', {
+                        required: REQUIRED_VALIDATION_MESSAGE, pattern: {
+                            value: EMAIL_REGEX,
+                            message: 'Enter a valid email address'
+                        }
+                    })} />
+                    {errors.email && <FormErrorMessage children={errors.email.message} />}
                 </FormControl>
 
-                <FormControl isRequired>
-                    <FormLabel>First names</FormLabel>
-                    <Input {...inputFirstnameProps} />
+                <FormControl isInvalid={!!errors.firstname}>
+                    <FormLabel>First name <span style={{ color: 'red' }}>*</span></FormLabel>
+                    <Input {...inputFirstnameProps} {...register('firstname', { required: REQUIRED_VALIDATION_MESSAGE })} />
+                    {errors.firstname && <FormErrorMessage children={errors.firstname.message} />}
                 </FormControl>
 
-                <FormControl>
-                    <FormLabel>Last names</FormLabel>
-                    <Input {...inputLastnameProps} />
+                <FormControl isInvalid={!!errors.lastname}>
+                    <FormLabel>Last name <span style={{ color: 'red' }}>*</span></FormLabel>
+                    <Input {...inputLastnameProps}  {...register('lastname', { required: REQUIRED_VALIDATION_MESSAGE })} />
+                    {errors.lastname && <FormErrorMessage children={errors.lastname.message} />}
                 </FormControl>
 
-                <FormControl isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <Input {...inputPasswordProps} />
+                <FormControl isInvalid={!!errors.password}>
+                    <FormLabel>Password <span style={{ color: 'red' }}>*</span></FormLabel>
+                    <Input {...inputPasswordProps}  {...register('password', { required: REQUIRED_VALIDATION_MESSAGE })} />
+                    {errors.password && <FormErrorMessage children={errors.password.message} />}
                 </FormControl>
 
-                <Button {...btnSubmitProps} />
+                <Button {...btnSubmitProps} isLoading={isLoading} />
                 <Button {...btnBackProps} onClick={() => navigate('/')} />
+
+                {formError.hasError && <CustomAlert status="error" text={formError.message} />}
             </Form>
         </Box>
     );
 }
 
-const formProps: FormProps = {
-    name: 'register',
-    styles: {
-        width: {
-            base: '100%',
-            lg: '500px',
-        },
-        outline: '1px solid #e6e6e6cc',
-        padding: '20px',
-    }
-}
 
-const btnSubmitProps: ButtonProps = {
-    type: 'submit',
-    children: 'Register',
-    colorScheme: 'blue'
-}
-
-const btnBackProps: ButtonProps = {
-    type: 'button',
-    children: 'Not new? go login ➡️',
-    variant: 'outline'
-}
-
-const boxProps: BoxProps = {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDir: 'column',
-    padding: '15px',
-    alignItems: 'center',
-    height: '100%',
-}
-
-const inputEmailProps: InputProps = {
-    type: 'email',
-    name: 'email',
-    placeholder: 'example@example.com'
-}
-
-const inputFirstnameProps: InputProps = {
-    type: 'text',
-    name: 'firstname',
-    placeholder: 'Your first names here'
-}
-
-const inputLastnameProps: InputProps = {
-    type: 'text',
-    name: 'lastname',
-    placeholder: 'Your last names here'
-}
-
-const inputPasswordProps: InputProps = {
-    type: 'password',
-    name: 'password'
-}
 
 
 export { RegisterPage };
+
