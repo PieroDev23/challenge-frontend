@@ -1,13 +1,12 @@
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input } from "@chakra-ui/react";
-import axios, { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AUTH_ITEM_KEY_LS, AUTH_TOKEN_ITEM_KEY_LS, EMAIL_REGEX, EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
 import { useAuth, useLocalStorage } from "../../../hooks";
 import { CustomAlert, Form } from "../../../ui/components";
 import { boxProps, btnBackProps, btnSubmitProps, formProps, inputEmailProps, inputFirstnameProps, inputLastnameProps, inputPasswordProps } from "./styles";
-import { sanitizeObject } from "../../../helpers";
 
 
 
@@ -26,9 +25,9 @@ function RegisterPage() {
     }
 
 
-    const { setItem: setUserData } = useLocalStorage(AUTH_ITEM_KEY_LS);
+    const { setItem: setUserDataLs } = useLocalStorage(AUTH_ITEM_KEY_LS);
     const { setItem: setTokenLs } = useLocalStorage(AUTH_TOKEN_ITEM_KEY_LS);
-
+    const { onSendAuth } = useAuth();
     const { register, handleSubmit, formState } = useForm({ defaultValues });
     const { errors } = formState;
 
@@ -37,15 +36,14 @@ function RegisterPage() {
         setFormError({ hasError: false, message: '' });
         setIsLoading(true);
         try {
-            const { data: axiosData } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, sanitizeObject(data));
-            const { user, token } = axiosData.data;
+            const response = await onSendAuth(data, `${import.meta.env.VITE_API_URL}/auth/register`);
+            const { user, token } = response;
 
-            setUserData(user);
+            setUserDataLs(JSON.stringify(user));
             setTokenLs(token);
-
             navigate('/dashboard');
-
             setIsLoading(false);
+
         } catch (error) {
             setIsLoading(false);
 
