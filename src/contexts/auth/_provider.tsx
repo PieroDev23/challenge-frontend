@@ -1,37 +1,46 @@
-import { PropsWithChildren, useEffect, useState } from "react";
-import { AUTH_ITEM_KEY_LS } from "../../_constants";
-import { AuthContext } from "./_context";
-import { Auth } from "./_types.context";
+import { PropsWithChildren, createContext, useState } from "react";
 
 
 
+export type AuthData = {
+    isAuthenticated: boolean;
+    user: string | null
+}
+
+
+export const AuthContext = createContext<AuthData>({} as AuthData);
 
 
 function AuthContextProvider({ children }: PropsWithChildren) {
     /**
      * Initializers
      */
-    const [authSession, setAuthSession] = useState<Auth | null>(JSON.parse(localStorage.getItem('auth') ?? 'null'));
+
+    const [authData, setAuthData] = useState<AuthData>({
+        isAuthenticated: false,
+        user: null
+    });
+
+    
+
+
+    /**
+     * Contexts
+     */
+
+    /**
+     * Functions
+     */
 
     /**
      * Hooks
      */
-    useEffect(() => {
-        const auth = localStorage.getItem(AUTH_ITEM_KEY_LS);
-
-        if (!auth) {
-            setAuthSession(null);
-            return
-        }
-
-        setAuthSession(JSON.parse(auth));
-    }, []);
 
     /**
      * Renders
      */
     return (
-        <AuthContext.Provider value={{ auth: authSession }}>
+        <AuthContext.Provider value={{ ...authData }}>
             {children}
         </AuthContext.Provider>
     );

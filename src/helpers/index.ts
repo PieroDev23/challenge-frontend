@@ -5,7 +5,7 @@ export function sanitizeObject(obj: { [k: string]: any }) {
     for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
             const value = obj[key];
-            if (typeof value === 'string') {
+            if (typeof value === 'string' && key !== 'password') {
                 sanitizedObj[key] = value.trim().toLowerCase();
             } else {
                 sanitizedObj[key] = value;

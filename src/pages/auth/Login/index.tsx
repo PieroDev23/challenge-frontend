@@ -4,7 +4,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
-import { AUTH_ITEM_KEY_LS, EMAIL_REGEX, EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
+import { AUTH_ITEM_KEY_LS, AUTH_TOKEN_ITEM_KEY_LS, EMAIL_REGEX, EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
 import { useAuth, useLocalStorage } from "../../../hooks";
 import { CustomAlert, Form } from "../../../ui/components";
 import { boxProps, btnRegisterProps, btnSubmitProps, formProps, inputEmailProps, inputPasswordProps } from "./styles";
@@ -31,19 +31,11 @@ function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { setItem } = useLocalStorage(AUTH_ITEM_KEY_LS);
+    const { setItem: setUserData } = useLocalStorage(AUTH_ITEM_KEY_LS);
+    const { setItem: setTokenLs } = useLocalStorage(AUTH_TOKEN_ITEM_KEY_LS);
+
     const { register, handleSubmit, formState, } = useForm({ defaultValues });
     const { errors } = formState;
-
-    const { auth } = useAuth();
-
-    useEffect(() => {
-
-        if (auth) {
-            navigate('/dashboard');
-        }
-
-    }, [])
 
     const handleSubmitCallback = async (data: FieldValues) => {
         setFormError({ hasError: false, message: '' });
@@ -51,7 +43,11 @@ function LoginPage() {
         try {
             const { data: axiosData } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, sanitizeObject(data));
             // save data in LS
-            setItem(JSON.stringify(axiosData));
+            const { user, token } = axiosData.data;
+
+            setUserData(user);
+            setTokenLs(token);
+
             setIsLoading(false);
             navigate('/dashboard');
         } catch (error) {
