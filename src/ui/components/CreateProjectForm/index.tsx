@@ -17,7 +17,7 @@ function CreateProjectForm({ onClose }: { onClose: () => void }) {
 
     /**
      * Contexts
-     */
+    */
 
     const defaultValues = {
         name: '',

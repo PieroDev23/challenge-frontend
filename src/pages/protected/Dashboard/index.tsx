@@ -46,7 +46,13 @@ function DashboardPage() {
             setLoading(true);
             try {
                 const response = await axios.get<GetTasksResponse>(`${import.meta.env.VITE_API_URL}/project/${project.idProject}/tasks`, { headers: { Authorization: `Bearer ${token}` } });
-                handleSetTasks(response.data.tasks.filter(task => !!task.asignees.find((asignee) => user.userId === asignee.userId)));
+                let tasks = response.data.tasks;
+
+                if (user.role !== 'ADMIN') {
+                    tasks = tasks.filter(task => !!task.asignees.find((asignee) => user.userId === asignee.userId));
+                }
+
+                handleSetTasks(tasks);
                 setLoading(false);
             } catch (error) {
                 setLoading(false);

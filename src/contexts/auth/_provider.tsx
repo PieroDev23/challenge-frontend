@@ -1,6 +1,6 @@
 import axios from "axios";
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
-import { FieldValues } from "react-hook-form";
+import { FieldValues, set } from "react-hook-form";
 import { sanitizeObject } from "../../helpers";
 import { AUTH_ITEM_KEY_LS, AUTH_TOKEN_ITEM_KEY_LS } from "../../_constants";
 import { User } from "../../_types";
@@ -26,20 +26,17 @@ function AuthContextProvider({ children }: PropsWithChildren) {
 
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem(AUTH_TOKEN_ITEM_KEY_LS));
     const [token, setToken] = useState(localStorage.getItem(AUTH_TOKEN_ITEM_KEY_LS));
+
+
     const [user, setUser] = useState<User>({} as User);
 
-
     const onSendAuth = async (data: FieldValues, url: string) => {
-        try {
-            const { data: axiosData } = await axios.post(url, sanitizeObject(data));
-            setIsAuthenticated(true);
-            setUser(axiosData.data.user);
-            // save data in LS
-            return axiosData.data;
-        } catch (error) {
-            console.log(error);
-            onLogout();
-        }
+        const { data: axiosData } = await axios.post(url, sanitizeObject(data));
+        setIsAuthenticated(true);
+        setUser(axiosData.data.user);
+        setToken(axiosData.data.token);
+        // save data in LS
+        return axiosData.data
     }
 
 

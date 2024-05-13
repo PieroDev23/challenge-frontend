@@ -39,12 +39,14 @@ function CreateTaskForm({ onClose }: { onClose: () => void }) {
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues });
 
     useEffect(() => {
+        console.log(project);
         const options = project.members.map(member => ({ value: member.userId, label: `${member.firstname} ${member.lastname}` }));
         setOptions(options);
     }, []);
 
 
     const handleSetAsignees = (evt: any) => {
+        console.log(evt)
         const asignees = evt.map((a: any) => a.value);
         setAsignees(asignees);
     }

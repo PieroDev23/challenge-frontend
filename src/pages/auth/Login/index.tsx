@@ -46,18 +46,17 @@ function LoginPage() {
         setIsLoading(true);
         try {
             const response = await onSendAuth(data, `${import.meta.env.VITE_API_URL}/auth/login`);
-            const { user, token } = response;
-            setUserDataLs(JSON.stringify(user));
-            setTokenLs(token);
+
+            setUserDataLs(JSON.stringify(response.user));
+            setTokenLs(response.token);
 
             setIsLoading(false);
             navigate('/dashboard');
         } catch (error) {
-            if (!(error instanceof AxiosError)) {
-                return;
+            if (error instanceof AxiosError) {
+                setIsLoading(false);
+                setFormError({ hasError: true, message: error.response?.data.message || EXCEPTION_ERROR_MESSAGE });
             }
-            setIsLoading(false);
-            setFormError({ hasError: true, message: error.response?.data.message || EXCEPTION_ERROR_MESSAGE });
         }
     }
 
