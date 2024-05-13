@@ -1,9 +1,9 @@
-import { Badge, Button, CardFooter, CardHeader, Text, Card as ChakraCard, CardProps as ChakraCardProps, Flex, Heading, useDisclosure, Box, List, ListItem, UnorderedList, Select } from "@chakra-ui/react";
+import { Badge, Box, Button, CardFooter, CardHeader, Card as ChakraCard, CardProps as ChakraCardProps, Flex, Heading, ListItem, Select, Text, UnorderedList, useDisclosure } from "@chakra-ui/react";
+import { useState } from "react";
+import { STATE_TASK_OPTIONS } from "../../../_constants";
 import { Project, Task } from "../../../_types";
 import { useAuth, useContent, useProjects, useTasks } from "../../../hooks";
 import { CustomModal } from "../CustomModal";
-import { STATE_TASK_OPTIONS } from "../../../_constants";
-import { useState } from "react";
 
 
 
@@ -139,3 +139,4 @@ const chakraCardProps: ChakraCardProps = {
 
 
 export { Card };
+

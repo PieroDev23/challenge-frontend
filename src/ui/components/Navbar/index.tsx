@@ -47,7 +47,10 @@ function Navbar() {
                 <Heading as="h1" fontSize={'25px'} textTransform={'capitalize'}>Bienvenid@ {user.firstname}👋</Heading>
                 <Flex {...flexWrapperProps}>
                     <Button {...btnLogoutProps} onClick={() => onLogout()}>Logout</Button>
-                    <Button {...btnCreateProps} onClick={onOpen}>Create {label} </Button>
+                    {
+                        user.role === 'ADMIN' && <Button {...btnCreateProps} onClick={onOpen}>Create {label} </Button>
+                    }
+
                     {
                         view === 'tasks' && <Button {...btnBackToPrjectsProps} onClick={() => handleSetView('projects')}>See projects</Button>
                     }

@@ -1,10 +1,10 @@
-import { Box, BoxProps, Spinner } from "@chakra-ui/react";
+import { Box, BoxProps } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { GetProjectsResponse, GetTasksResponse, Project, Task } from "../../../_types";
+import { GetProjectsResponse, GetTasksResponse } from "../../../_types";
 import { useAuth, useProjects, useTasks } from "../../../hooks";
-import { ContentWrapper, Navbar } from "../../../ui/components";
 import { useContent } from "../../../hooks/useContent.hook";
+import { ContentWrapper, Navbar } from "../../../ui/components";
 
 
 
@@ -88,3 +88,4 @@ const pageWrapperProps: BoxProps = {
 
 
 export { DashboardPage };
+
