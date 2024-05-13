@@ -1,7 +1,9 @@
 
 
 import { Box, BoxProps, Button, ButtonProps, Flex, FlexProps, Heading, useDisclosure } from '@chakra-ui/react';
-import { useAuth } from '../../../hooks';
+import { useForm } from 'react-hook-form';
+import { useAuth, useContent, useProjects } from '../../../hooks';
+import { CreateProjectForm } from '../CreateProjectForm';
 import { CustomModal } from '../CustomModal';
 
 function Navbar() {
@@ -22,6 +24,8 @@ function Navbar() {
      */
     const { onLogout, user } = useAuth();
     const { onClose, onOpen, isOpen } = useDisclosure();
+    const { view, handleSetView } = useContent();
+
     /**
      * Renders
      */
@@ -31,11 +35,14 @@ function Navbar() {
                 <Heading as="h1" fontSize={'25px'} textTransform={'capitalize'}>Bienvenid@ {user.firstname}👋</Heading>
                 <Flex {...flexWrapperProps}>
                     <Button {...btnLogoutProps} onClick={() => onLogout()}>Logout</Button>
-                    <Button {...btnCreateProjectProps} onClick={onOpen}>Create Project </Button>
+                    <Button {...btnCreateProps} onClick={onOpen}>Create {view === 'projects' ? 'project' : 'task'} </Button>
+                    {
+                        view === 'tasks' && <Button {...btnBackToPrjectsProps} onClick={() => handleSetView('projects')}>See projects</Button>
+                    }
                 </Flex>
             </Box>
             <CustomModal title={'Create a new Project ✨'} onClose={onClose} isOpen={isOpen}>
-                <p>lil</p>
+                <CreateProjectForm />
             </CustomModal>
         </>
     );
@@ -61,8 +68,12 @@ const btnLogoutProps: ButtonProps = {
     variant: 'outline'
 }
 
-const btnCreateProjectProps: ButtonProps = {
+const btnCreateProps: ButtonProps = {
     colorScheme: 'blue'
+}
+
+const btnBackToPrjectsProps: ButtonProps = {
+    colorScheme: 'purple'
 }
 
 export { Navbar };

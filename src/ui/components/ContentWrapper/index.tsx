@@ -40,8 +40,10 @@ function ContentWrapper() {
                     }
                     {
                         (tasks && view === 'tasks') && tasks
-                            .filter(task => !!task.asignees.find((asignee) => user.userId === asignee.userId))
                             .map(task => <Card key={task.idTask} type="task" task={{ ...task }} />)
+                    }
+                    {
+                        view === 'tasks' && tasks.length === 0 ? 'no tasks on this project where finded, create one! 🐸' : null
                     }
                 </SimpleGrid>
             </Box>

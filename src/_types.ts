@@ -7,16 +7,8 @@ export interface GetProjectsResponse {
 export interface Project {
     idProject: string;
     name: string;
-    members: CreatedBy[];
-    createdBy: CreatedBy;
-}
-
-export interface CreatedBy {
-    userId: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    role: string;
+    members: User[];
+    createdBy: User;
 }
 
 export interface GetTasksResponse {

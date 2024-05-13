@@ -1,4 +1,4 @@
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 type ModalProps = {
@@ -8,7 +8,7 @@ type ModalProps = {
     children: ReactNode
 };
 
-function CustomModal({ isOpen, onClose, children, title }: ModalProps) {
+function CustomModal({ isOpen, onClose,  children, title }: ModalProps) {
     /**
      * Initializers
      */
@@ -38,9 +38,6 @@ function CustomModal({ isOpen, onClose, children, title }: ModalProps) {
                     <ModalBody>
                         {children}
                     </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={onClose}>Close</Button>
-                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
@@ -48,3 +45,4 @@ function CustomModal({ isOpen, onClose, children, title }: ModalProps) {
 }
 
 export { CustomModal };
+

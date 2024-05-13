@@ -92,6 +92,7 @@ export const TaskCard = (task: Task) => {
 
                 </Box>
                 <Box marginTop={10}>
+                    <Text fontWeight={'bold'}>Status:</Text>
                     <Select value={task.status} onChange={(e) => handleChangeStatus(e.target.value)} isDisabled={loading}>
                         {
                             STATE_TASK_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.name}</option>)

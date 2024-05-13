@@ -66,7 +66,7 @@ function TasksProvider({ children }: PropsWithChildren) {
                 }
             }
 
-            return currentTask
+            return currentTask;
         });
 
         setTasks(updatedTasks);

@@ -24,7 +24,7 @@ function DashboardPage() {
      */
 
 
-    const { token } = useAuth();
+    const { token, user } = useAuth();
     const { view } = useContent();
     const { handleSetProjects, project } = useProjects();
     const { handleSetTasks } = useTasks();
@@ -47,7 +47,7 @@ function DashboardPage() {
             setLoading(true);
             try {
                 const response = await axios.get<GetTasksResponse>(`${import.meta.env.VITE_API_URL}/project/${project.idProject}/tasks`, { headers: { Authorization: `Bearer ${token}` } });
-                handleSetTasks(response.data.tasks);
+                handleSetTasks(response.data.tasks.filter(task => !!task.asignees.find((asignee) => user.userId === asignee.userId)));
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
