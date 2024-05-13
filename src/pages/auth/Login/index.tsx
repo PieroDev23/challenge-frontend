@@ -1,7 +1,7 @@
 
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input } from "@chakra-ui/react";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { AUTH_ITEM_KEY_LS, AUTH_TOKEN_ITEM_KEY_LS, EMAIL_REGEX, EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
@@ -32,7 +32,14 @@ function LoginPage() {
     const { setItem: setTokenLs } = useLocalStorage(AUTH_TOKEN_ITEM_KEY_LS);
     const { register, handleSubmit, formState, } = useForm({ defaultValues });
     const { errors } = formState;
-    const { onSendAuth } = useAuth();
+    const { onSendAuth, isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+            return;
+        }
+    }, []);
 
     const handleSubmitCallback = async (data: FieldValues) => {
         setFormError({ hasError: false, message: '' });

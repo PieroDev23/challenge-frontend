@@ -2,7 +2,7 @@ import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input }
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { AUTH_ITEM_KEY_LS, AUTH_TOKEN_ITEM_KEY_LS, EMAIL_REGEX, EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
 import { useAuth, useLocalStorage } from "../../../hooks";
 import { CustomAlert, Form } from "../../../ui/components";
@@ -34,9 +34,9 @@ function RegisterPage() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate('/dashboard');
+            redirect('/dashboard');
         }
-    }, []);
+    }, [])
 
     const handleSubmitCallback = async (data: FieldValues) => {
         setFormError({ hasError: false, message: '' });

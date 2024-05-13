@@ -3,13 +3,12 @@ import { useAuth } from "../../hooks";
 import { useEffect } from "react";
 
 
-
 export const ProtectedRoutes = () => {
     const { isAuthenticated } = useAuth();
 
     useEffect(() => {
-        console.log(isAuthenticated);
-    }, []);
+        console.log(isAuthenticated)
+    }, [])
 
-    return isAuthenticated ? <Outlet /> : <Navigate to={'/'} />
+    return isAuthenticated ? <Outlet /> : <Navigate to={'/'} replace />
 }
