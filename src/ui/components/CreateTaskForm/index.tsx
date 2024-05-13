@@ -1,13 +1,12 @@
 import { Button, Divider, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from "@chakra-ui/react";
-import { Form } from "../Form";
-import { useEffect, useState } from "react";
-import { useAuth, useProjects, useTasks } from "../../../hooks";
-import { getSelectOptions } from "../../../helpers";
-import Select from "react-select";
-import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import Select from "react-select";
 import { EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from "../../../_constants";
+import { useProjects, useTasks } from "../../../hooks";
 import { CustomAlert } from "../CustomAlert";
+import { Form } from "../Form";
 
 
 function CreateTaskForm({ onClose }: { onClose: () => void }) {

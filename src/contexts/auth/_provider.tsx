@@ -1,9 +1,9 @@
 import axios from "axios";
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
-import { FieldValues, set } from "react-hook-form";
-import { sanitizeObject } from "../../helpers";
+import { FieldValues } from "react-hook-form";
 import { AUTH_ITEM_KEY_LS, AUTH_TOKEN_ITEM_KEY_LS } from "../../_constants";
 import { User } from "../../_types";
+import { sanitizeObject } from "../../helpers";
 
 
 
@@ -82,3 +82,4 @@ function AuthContextProvider({ children }: PropsWithChildren) {
 }
 
 export { AuthContextProvider };
+
