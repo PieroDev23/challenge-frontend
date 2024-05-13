@@ -4,6 +4,14 @@
 Challenge delfosti parte Frontend ✨
 
 
+## Dependencias
+
+- Typescript (lenguaje de programación)
+- Chakra UI (Componentes de UI)
+- react-hook-form (manejo de formularios)
+- react-select (multi-selects para formularios)
+- react-router-dom manejo de rutas
+
 ## Environment Variables
 
 Para levantar este proyecto se deben de setear la siguientes variables
@@ -61,6 +69,9 @@ Te deberá de aparecer los siguientes mensajes en la terminal.
 - Crear tareas y asignarlas a un proyecto
 - Ver proyectos y tareas
 - cambiar de estado las tareas
+- validacion de formularios
+- routing SPA Behavior
+- etc :)
 
 
 ## Authores
