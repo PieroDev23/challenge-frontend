@@ -12,7 +12,6 @@ function ContentWrapper() {
     const { view } = useContent();
     const { projects } = useProjects();
     const { tasks } = useTasks();
-    const { user } = useAuth();
 
     /**
      * Contexts

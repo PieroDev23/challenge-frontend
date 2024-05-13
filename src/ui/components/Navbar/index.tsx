@@ -1,8 +1,7 @@
 
 
 import { Box, BoxProps, Button, ButtonProps, Flex, FlexProps, Heading, useDisclosure } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { useAuth, useContent, useProjects } from '../../../hooks';
+import { useAuth, useContent } from '../../../hooks';
 import { CreateProjectForm } from '../CreateProjectForm';
 import { CustomModal } from '../CustomModal';
 
