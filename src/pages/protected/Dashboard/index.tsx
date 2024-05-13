@@ -1,3 +1,5 @@
+import { Box, BoxProps } from "@chakra-ui/react";
+import { Navbar, ContentWrapper } from "../../../ui/components";
 
 
 
@@ -28,9 +30,19 @@ function DashboardPage(props: DashboardPageProps) {
      */
     return (
         <>
-            <h1>DashboardPage Works</h1>
+            <Box {...pageWrapperProps}>
+                <Navbar/>
+                <ContentWrapper />
+            </Box>
         </>
     );
 }
+
+const pageWrapperProps: BoxProps = {
+    display: 'flex',
+    flexDir: 'column',
+    height: '100%'
+}
+
 
 export { DashboardPage };
