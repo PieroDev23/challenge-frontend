@@ -37,12 +37,6 @@ function CreateTaskForm({ onClose }: { onClose: () => void }) {
      */
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues });
 
-    useEffect(() => {
-        console.log(project);
-        const options = project.members.map(member => ({ value: member.userId, label: `${member.firstname} ${member.lastname}` }));
-        setOptions(options);
-    }, []);
-
 
     const handleSetAsignees = (evt: any) => {
         console.log(evt)
@@ -74,6 +68,26 @@ function CreateTaskForm({ onClose }: { onClose: () => void }) {
         }
         onClose();
     }
+
+    useEffect(() => {
+        // console.log(project);
+
+
+        const handleSetOptions = () => {
+            const currentOptions = project.members.map(({ userId, firstname, lastname }) => ({ value: userId, label: `${firstname} ${lastname}` }));
+            setOptions(currentOptions);
+            console.log(options)
+        }
+
+        handleSetOptions();
+
+        // const options = project.members.map(member => ({ value: member.userId, label: `${member.firstname} ${member.lastname}` }));
+        // console.log(options);
+        // setOptions(options);
+    }, []);
+
+
+
     /**
      * Renders
      */

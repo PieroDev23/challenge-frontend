@@ -1,10 +1,11 @@
 
 
 import { Box, BoxProps, Button, ButtonProps, Flex, FlexProps, Heading, useDisclosure } from '@chakra-ui/react';
-import { useAuth, useContent } from '../../../hooks';
+import { useAuth, useContent, useProjects, useTasks } from '../../../hooks';
 import { CreateProjectForm } from '../CreateProjectForm';
 import { CustomModal } from '../CustomModal';
 import { CreateTaskForm } from '../CreateTaskForm';
+import { Project, Task } from '../../../_types';
 
 function Navbar() {
     /**
@@ -23,6 +24,8 @@ function Navbar() {
      * Hooks
      */
     const { onLogout, user } = useAuth();
+    const { handleSetProject, handleSetProjects } = useProjects();
+    const { handleSetTask, handleSetTasks } = useTasks();
     const { onClose, onOpen, isOpen } = useDisclosure();
     const { view, handleSetView } = useContent();
 
@@ -38,6 +41,16 @@ function Navbar() {
         return <CreateTaskForm onClose={onClose} />
     }
 
+    const handleLogout = () => {
+
+        onLogout();
+        handleSetProject({} as Project);
+        handleSetProjects([]);
+        handleSetTask({} as Task);
+        handleSetTasks([]);
+        handleSetView("projects");
+    }
+
     /**
      * Renders
      */
@@ -46,7 +59,9 @@ function Navbar() {
             <Box {...navbarProps}>
                 <Heading as="h1" fontSize={'25px'} textTransform={'capitalize'}>Bienvenid@ {user.firstname}👋</Heading>
                 <Flex {...flexWrapperProps}>
-                    <Button {...btnLogoutProps} onClick={() => onLogout()}>Logout</Button>
+                    <Button {...btnLogoutProps} onClick={() => {
+                        handleLogout();
+                    }}>Logout</Button>
                     {
                         user.role === 'ADMIN' && <Button {...btnCreateProps} onClick={onOpen}>Create {label} </Button>
                     }

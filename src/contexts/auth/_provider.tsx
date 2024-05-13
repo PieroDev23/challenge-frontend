@@ -42,6 +42,8 @@ function AuthContextProvider({ children }: PropsWithChildren) {
 
     const onLogout = () => {
         setIsAuthenticated(false);
+        setUser({} as User);
+        setToken("");
         localStorage.removeItem(AUTH_ITEM_KEY_LS)
         localStorage.removeItem(AUTH_TOKEN_ITEM_KEY_LS);
     }
