@@ -4,6 +4,7 @@ import { Box, BoxProps, Button, ButtonProps, Flex, FlexProps, Heading, useDisclo
 import { useAuth, useContent } from '../../../hooks';
 import { CreateProjectForm } from '../CreateProjectForm';
 import { CustomModal } from '../CustomModal';
+import { CreateTaskForm } from '../CreateTaskForm';
 
 function Navbar() {
     /**
@@ -25,6 +26,18 @@ function Navbar() {
     const { onClose, onOpen, isOpen } = useDisclosure();
     const { view, handleSetView } = useContent();
 
+    const label = view === 'projects' ? 'project' : 'task';
+
+
+    const ModalForm = ({ onClose }: { onClose: () => void; }) => {
+
+        if (view === 'projects') {
+            return <CreateProjectForm onClose={onClose} />
+        }
+
+        return <CreateTaskForm onClose={onClose} />
+    }
+
     /**
      * Renders
      */
@@ -34,14 +47,14 @@ function Navbar() {
                 <Heading as="h1" fontSize={'25px'} textTransform={'capitalize'}>Bienvenid@ {user.firstname}👋</Heading>
                 <Flex {...flexWrapperProps}>
                     <Button {...btnLogoutProps} onClick={() => onLogout()}>Logout</Button>
-                    <Button {...btnCreateProps} onClick={onOpen}>Create {view === 'projects' ? 'project' : 'task'} </Button>
+                    <Button {...btnCreateProps} onClick={onOpen}>Create {label} </Button>
                     {
                         view === 'tasks' && <Button {...btnBackToPrjectsProps} onClick={() => handleSetView('projects')}>See projects</Button>
                     }
                 </Flex>
             </Box>
-            <CustomModal title={'Create a new Project ✨'} onClose={onClose} isOpen={isOpen}>
-                <CreateProjectForm />
+            <CustomModal title={`Create a new ${label} ✨`} onClose={onClose} isOpen={isOpen}>
+                <ModalForm onClose={onClose} />
             </CustomModal>
         </>
     );

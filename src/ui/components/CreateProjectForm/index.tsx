@@ -1,17 +1,16 @@
 
-import { Form } from '../Form';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
-import axios, { AxiosError } from 'axios';
+import { Button, Divider, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import Select from 'react-select';
-import { injectTokenOnHeaders } from '../../../helpers';
-import { useAuth, useProjects } from '../../../hooks';
-import { User } from '../../../_types';
 import { useForm } from 'react-hook-form';
+import Select from 'react-select';
 import { EXCEPTION_ERROR_MESSAGE, REQUIRED_VALIDATION_MESSAGE } from '../../../_constants';
+import { getSelectOptions } from '../../../helpers';
+import { useAuth, useProjects } from '../../../hooks';
 import { CustomAlert } from '../CustomAlert';
+import { Form } from '../Form';
 
-function CreateProjectForm() {
+function CreateProjectForm({ onClose }: { onClose: () => void }) {
     /**
      * Initializers
      */
@@ -28,28 +27,19 @@ function CreateProjectForm() {
     const [consumersIds, setConsumersIds] = useState<string[]>([]);
     const [formError, setFormError] = useState({ hasError: false, message: '' });
     const [loading, setLoading] = useState(false);
-    const { token } = useAuth();
+    const { token, user } = useAuth();
     const { handleCreateProject } = useProjects();
 
-    const { register, formState: { errors }, handleSubmit } = useForm({ defaultValues });
-    useEffect(() => {
-        //todo: call api here
 
-        const getAllUsers = async () => {
-            try {
-                const { data: axiosData } = await axios.get(`${import.meta.env.VITE_API_URL}/user/get-all`, { ...injectTokenOnHeaders(token!) });
-                const options = axiosData.users.map(({ firstname, lastname, userId, role }: User) => ({
-                    value: userId,
-                    label: `${firstname} ${lastname} ${role === 'ADMIN' ? '(ADMIN)' : ''}`
-                }));
-                setOptions(options);
-            } catch (error) {
-                console.log(error);
-            }
+    const { register, formState: { errors }, handleSubmit } = useForm({ defaultValues });
+
+    useEffect(() => {
+        const fetchOptions = async () => {
+            const options = await getSelectOptions(token!);
+            setOptions(options.filter((opt: any) => opt.value !== user.userId))
         }
 
-        getAllUsers();
-
+        fetchOptions();
     }, []);
 
 
@@ -83,6 +73,9 @@ function CreateProjectForm() {
             setFormError({ hasError: true, message: error.response?.data.message || EXCEPTION_ERROR_MESSAGE });
             console.log(error.response?.data);
         }
+
+
+        onClose();
     }
 
     /**
@@ -98,9 +91,11 @@ function CreateProjectForm() {
                 </FormControl>
 
                 <FormControl>
+                    <FormLabel>Participants <span style={{ color: 'red' }}>*</span></FormLabel>
                     <Select name='participants' isMulti options={options} onChange={handleSelectConsumersIds} />
                 </FormControl>
 
+                <Divider />
                 <Button colorScheme='blue' type='submit' isLoading={loading}>Create ⬆️</Button>
 
                 {formError.hasError && <CustomAlert status="error" text={formError.message} />}

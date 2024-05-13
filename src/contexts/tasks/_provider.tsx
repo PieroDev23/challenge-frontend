@@ -11,7 +11,16 @@ type tasksProviderValues = {
     handleSetTasks: (tasks: Task[]) => void;
     sendTaskUpdated: (status: string) => Promise<void>;
     handleUpdateStatusTasks: (status: string) => void;
+    handleCreateTask: (newTask: NewTask) => Promise<void>;
 };
+
+
+export type NewTask = {
+    title: string;
+    description: string;
+    asignees: string[]
+    idProject: string;
+}
 
 
 export const TasksContext = createContext({} as tasksProviderValues);
@@ -56,7 +65,6 @@ function TasksProvider({ children }: PropsWithChildren) {
 
 
     const handleUpdateStatusTasks = (status: any) => {
-
         //finding the task
         const updatedTasks = tasks.map(currentTask => {
             if (currentTask.idTask === task.idTask) {
@@ -72,6 +80,19 @@ function TasksProvider({ children }: PropsWithChildren) {
         setTasks(updatedTasks);
     }
 
+    const handleCreateTask = async (newTask: NewTask) => {
+
+        try {
+            const { data: axiosData } = await axios.post(`${import.meta.env.VITE_API_URL}/task/create`, newTask, injectTokenOnHeaders(token!));
+            const { project, updatedAt, createdAt, asignedBy, ...freshTask } = axiosData.data;
+            setTasks(prevTasks => [...prevTasks, freshTask]);
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     /**
      * Hooks
      */
@@ -80,7 +101,7 @@ function TasksProvider({ children }: PropsWithChildren) {
      * Renders
      */
     return (
-        <TasksContext.Provider value={{ task, tasks, handleSetTask, handleSetTasks, handleUpdateStatusTasks, sendTaskUpdated }}>
+        <TasksContext.Provider value={{ task, tasks, handleSetTask, handleSetTasks, handleUpdateStatusTasks, sendTaskUpdated, handleCreateTask }}>
             {children}
         </TasksContext.Provider>
     );

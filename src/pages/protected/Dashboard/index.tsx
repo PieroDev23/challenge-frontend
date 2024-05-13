@@ -23,7 +23,6 @@ function DashboardPage() {
      * Hooks
      */
 
-
     const { token, user } = useAuth();
     const { view } = useContent();
     const { handleSetProjects, project } = useProjects();

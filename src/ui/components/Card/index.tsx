@@ -91,7 +91,7 @@ export const TaskCard = (task: Task) => {
                     </UnorderedList>
 
                 </Box>
-                <Box marginTop={10}>
+                <Box marginTop={10} paddingBottom={'13px'}>
                     <Text fontWeight={'bold'}>Status:</Text>
                     <Select value={task.status} onChange={(e) => handleChangeStatus(e.target.value)} isDisabled={loading}>
                         {

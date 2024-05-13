@@ -1,5 +1,5 @@
 import { Box, FlexProps, Heading, HeadingProps, SimpleGrid } from "@chakra-ui/react";
-import { useAuth, useProjects, useTasks } from "../../../hooks";
+import { useProjects, useTasks } from "../../../hooks";
 import { useContent } from "../../../hooks/useContent.hook";
 import { Card } from "../Card";
 
@@ -10,7 +10,7 @@ function ContentWrapper() {
      */
 
     const { view } = useContent();
-    const { projects } = useProjects();
+    const { projects, project } = useProjects();
     const { tasks } = useTasks();
 
     /**
@@ -31,7 +31,7 @@ function ContentWrapper() {
     return (
         <>
             <Box {...flexWrapperProps}>
-                <Heading {...headingContentProps}>{view === 'tasks'}</Heading>
+                <Heading {...headingContentProps}>{view === 'tasks' ? `Tasks from: ${project.name}` : 'My Projects'}</Heading>
                 {/* CARDS GOES HERE */}
                 <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
                     {
