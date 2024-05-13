@@ -1,19 +1,17 @@
 
 
-import { Box, BoxProps, Button, ButtonProps, Flex, FlexProps, Heading } from '@chakra-ui/react';
-
+import { Box, BoxProps, Button, ButtonProps, Flex, FlexProps, Heading, useDisclosure } from '@chakra-ui/react';
+import { useAuth } from '../../../hooks';
+import { CustomModal } from '../CustomModal';
 
 function Navbar() {
     /**
      * Initializers
      */
 
-
     /**
      * Contexts
      */
-
-
 
     /**
      * Functions
@@ -22,19 +20,23 @@ function Navbar() {
     /**
      * Hooks
      */
-
+    const { onLogout, user } = useAuth();
+    const { onClose, onOpen, isOpen } = useDisclosure();
     /**
      * Renders
      */
     return (
         <>
             <Box {...navbarProps}>
-                <Heading as="h1" fontSize={'25px'}>Bienvenid@ Usuario👋</Heading>
+                <Heading as="h1" fontSize={'25px'} textTransform={'capitalize'}>Bienvenid@ {user.firstname}👋</Heading>
                 <Flex {...flexWrapperProps}>
-                    <Button {...btnLogoutProps}>Logout</Button>
-                    <Button {...btnCreateProjectProps}>Create Project </Button>
+                    <Button {...btnLogoutProps} onClick={() => onLogout()}>Logout</Button>
+                    <Button {...btnCreateProjectProps} onClick={onOpen}>Create Project </Button>
                 </Flex>
             </Box>
+            <CustomModal title={'Create a new Project ✨'} onClose={onClose} isOpen={isOpen}>
+                <p>lil</p>
+            </CustomModal>
         </>
     );
 }
@@ -64,3 +66,4 @@ const btnCreateProjectProps: ButtonProps = {
 }
 
 export { Navbar };
+

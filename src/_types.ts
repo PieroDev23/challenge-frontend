@@ -6,7 +6,7 @@ export interface GetProjectsResponse {
 
 export interface Project {
     idProject: string;
-    title: string;
+    name: string;
     members: CreatedBy[];
     createdBy: CreatedBy;
 }

@@ -15,3 +15,8 @@ export function sanitizeObject(obj: { [k: string]: any }) {
 
     return sanitizedObj;
 }
+
+
+export function injectTokenOnHeaders(token: string) {
+    return { headers: { Authorization: `Bearer ${token}` } }
+}
